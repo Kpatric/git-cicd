@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build: ./
+    ports:
+      - 8080:8080
+    container_name: docker-demo-app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/employeedb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+
+  db:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - 5432:5432
+    container_name: docker-demo-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=employeedb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
